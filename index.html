@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor QR Code</title>
+
+    <!-- Link Style.css File -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Image on Title Bar -->
+    <link rel="icon" href="images/favicon.ico" type="image/gif">
+
+</head>
+
+<body>
+
+    <!-- Display image in FullScreen -->
+    <div class="fullscreen">
+
+    </div>
+
+    <div class="backH">
+
+    </div>
+
+
+
+    <!-- Display Message's  -->
+    <p id="demo">⚠️ Por favor, cole ou digite o link para continuar!⚠️</p>
+    <p id="demo2">Iniciando seu Download...⬇️</p>
+
+
+    <!-- QR Code Generator Section -->
+    <div class="wrapper">
+        <div class="card__corner">
+            <div class="card__corner-triangle">
+            </div>
+            <!-- Header Section  -->
+            <header>
+                <h1>Conversor QR Code</h1>
+                <p>Cole o seu link para converter!</p>
+            </header>
+
+            <div class="form">
+                <input type="text" id="text1" name="qrCode" placeholder="Cole seu link aqui" required>
+                <button onClick="inputtext()" id="myBtn" class="myBtn">Gerar Qr Code</button>
+            </div>
+
+            <div class="qr-code">
+
+                <img src="" title="Ver código QR em tela cheia" class="imgfull">
+
+            </div>
+
+            <button class="dbtn" onclick="downloadIg(this)" title="Download QR Code">DOWNLOAD</button>
+
+        </div>
+
+
+
+
+        <!-- Footer -->
+        <footer>
+            Feito de ❤️ por <a href="https://instagram.com/csantos.sz?igshid=OGQ5ZDc2ODk2ZA==" target="_blank">
+                @csantos.sz</a>
+        </footer>
+
+
+        <!-- Linked a JS file -->
+        <script type="text/javascript" src="script.js"></script>
+
+</body>
+
+</html>
