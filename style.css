@@ -156,11 +156,14 @@ a:hover {
 
 /* Footer Section Properties */
 footer {
-    position: fixed;
+    text-align: center;
+    position: relative;
     color: rgb(117, 117, 117);
-    padding: 20px 42px;
+    padding: 20px;
     bottom: 0;
+    width: 100%;
 }
+
 
 
 /* Display Messages Properties */
