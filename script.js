@@ -1,7 +1,12 @@
+// DECLARAÇÃO DA VÁRIAVEL GLOBAL qrValue
+var qrValue;
+var qrCodeGenerated = false; // VÁRIAVEL PARA RASTREAR SE UM QR CODE FOI GERADO
+
+
 const wrapper = document.querySelector(".wrapper"),
-qrInput = wrapper.querySelector(".form input"),
-generateBtn = wrapper.querySelector(".form button"),
-qrImg = wrapper.querySelector(".qr-code img");
+  qrInput = wrapper.querySelector(".form input"),
+  generateBtn = wrapper.querySelector(".form button"),
+  qrImg = wrapper.querySelector(".qr-code img");
 let preValue;
 
 const dbtn = document.querySelector('.dbtn');
@@ -11,123 +16,143 @@ backH.style.visibility = "hidden";
 const fullPage = document.querySelector('.fullscreen');
 fullPage.style.visibility = "hidden";
 
-
 //Exibe IDs de mensagens
 let demo = document.getElementById("demo");
 demo.style.visibility = "hidden";
 let demo2 = document.getElementById("demo2");
 demo2.style.visibility = "hidden";
+let demo3 = document.getElementById("demo3");
+demo3.style.visibility = "hidden";
 
-
-// Quando pressiono Enter no Form Input, ele acionará (clique) o botão "Gerar código QR"
+// QUANDO PRESSIONO ENTER NO FORM INPUT, ELE ACIONARÁ (CLIQUE) O BOTÃO "GERAR CÓDIGO QR"
 var input = document.getElementById("text1");
-input.addEventListener("keypress", function(event) {
+input.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
     event.preventDefault();
     document.getElementById("myBtn").click();
   }
 });
 
+// ADICIONAR OUVINTE DE CLIQUE AO BOTÃO DE GERAÇÃO DE QR CODE
+document.getElementById('myBtn').addEventListener('click', function () {
+  var qrInput = document.getElementById('text1');
+  var generateBtn = document.getElementById('myBtn');
+  var qrImg = document.querySelector('.qr-code img');
 
-// Propriedades do botão de geração de código QR
-generateBtn.addEventListener("click", () =>{
+  qrValue = qrInput.value.trim();
 
-    let qrValue = qrInput.value.trim();
-    if(!qrValue || preValue === qrValue) return;
-    preValue = qrValue;
-    generateBtn.innerText = "Gerando QR Code⌛.....";
-    generateBtn.style.cursor="no-drop";
-    generateBtn.style.opacity= "0.7";
+  if (!qrValue || preValue === qrValue) return;
 
-    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrValue}`;//.src
+  generateBtn.onmouseover = function () {
+    setTimeout(() => {
+      demo3.style.visibility = 'visible';
+    }, 10);
+  }
 
-    qrImg.addEventListener("load", () =>{
-        wrapper.classList.add("active");
-        generateBtn.innerText = "QR Code Gerado";
-        generateBtn.style.cursor="no-drop ";
-        generateBtn.style.opacity= "0.7";
+  generateBtn.innerText = 'Gerando QR Code⌛...';
+  generateBtn.style.cursor = 'no-drop';
+  generateBtn.style.opacity = '0.7';
 
-        document.querySelector("#text1").addEventListener("input", test);
+  qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrValue}`;
 
-        document.getElementById("theImage").style.visibility = "hidden";
-        document.getElementById("btn").style.visibility = "hidden";
-        document.getElementById("btn1").style.visibility = "hidden";
-        document.getElementById("demo").style.visibility = "hidden";
-        backH.style.visibility = "visible";
-        
-//Passando o mouse sobre o elemento
-        generateBtn.onmouseover = function() {
-          setTimeout(() => {
-            demo1.style.visibility = 'visible';
-          }, 150);
-        }
+  qrImg.addEventListener('load', () => {
+    wrapper.classList.add('active');
+    wrapper.classList.add('expanding');
+    generateBtn.innerText = 'QR Code Gerado';
+    generateBtn.style.cursor = 'no-drop ';
+    generateBtn.style.opacity = '0.7';
+    
 
-//No mouse fora do elemento
-        generateBtn.onmouseout = function() {
-          setTimeout(() => {
-            demo1.style.visibility = 'hidden';
-          }, 150);
-        }
-    });
-});
+    document.querySelector('#text1').addEventListener('input', test);
+
+    document.getElementById('theImage').style.visibility = 'hidden';
+    document.getElementById('btn').style.visibility = 'hidden';
+    document.getElementById('btn1').style.visibility = 'hidden';
+    document.getElementById('demo').style.visibility = 'hidden';
+    backH.style.visibility = 'visible';
 
 
-// Quando o Form Input não contém nenhum valor, ele é mostrado como está antes do QR Code gerado
-qrInput.addEventListener("keyup", () =>{
-    if(!qrInput.value.trim()) {
+    setTimeout(() => {
+      wrapper.classList.remove('expanding');
+    }, 500);
 
-      sameprop();
-
-    }
-});
-
-
-// Verifica se a entrada do formulário tem valor ou não e exibe a mensagem
-function inputtext(){
-    var value1 = document.getElementById('text1').value;
-    if (value1.length == 0)
-    {        
-      demo.style.visibility = "visible";      
+    generateBtn.onmouseover = function () {
       setTimeout(() => {
-        demo.style.visibility = 'hidden';
-      }, 1300); 
+        demo1.style.visibility = 'visible';
+      }, 150);
     }
+
+    generateBtn.onmouseout = function () {
+      setTimeout(() => {
+        demo1.style.visibility = 'hidden';
+      }, 150);
+    };
+    
+    // HABILITAR OS BOTÕES DE DOWNLOAD QUANDO O QR CODE FOR GERADO
+    document.querySelectorAll('.dbtn').forEach(btn => {
+      btn.removeAttribute('disabled');
+    });
+
+    // ATUALIZAR A VARIÁVEL INDICANDO QUE UM QR CODE FOI GERADO
+    qrCodeGenerated = true;
+  });
+});
+
+// QUANDO O FORM INPUT NÃO CONTÉM NENHUM VALOR, ELE É MOSTRADO COMO ESTÁ ANTES DO QR CODE GERADO
+qrInput.addEventListener("keyup", () => {
+  if (!qrInput.value.trim()) {
+
+    sameprop();
+
+  }
+});
+
+// VERIFICA SE A ENTRADA DO FORMULÁRIO TEM VALOR OU NÃO E EXIBE A MENSAGEM
+function inputtext() {
+  var value1 = document.getElementById('text1').value;
+  if (value1.length == 0) {
+    demo.style.visibility = "visible";
+    setTimeout(() => {
+      demo.style.visibility = 'hidden';
+    }, 1300);
+  }
 }
 
-
-
-
-// Desativa o modo de desenvolvedor (desativa o botão direito, código de tecla 123, ctrl+shift+i, ctrl+shift+c, ctrl+shift+j, ctrl+u)
-// document.onkeydown = function(e) {
-//   if(event.keyCode == 123) {       
+// DESATIVA O MODO DE DESENVOLVEDOR (DESATIVA O BOTÃO DIREITO, CÓDIGO DE TECLA 123, CTRL+SHIFT+I, CTRL+SHIFT+C, CTRL+SHIFT+J, CTRL+U)
+// document.onkeydown = function (e) {
+//   if (event.keyCode == 123) {
 //     return false;
 //   }
-//   if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {       
+//   if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
 //     return false;
 //   }
-//   if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {       
+//   if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
 //     return false;
 //   }
-//   if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {       
+//   if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
 //     return false;
 //   }
-//   if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {      
+//   if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
 //     return false;
 //   }
 // }
 
-
-// //disable right click
-document.addEventListener('contextmenu', function(e){
-    e.preventDefault();
+// DESATIVA CLIQUE COM O BOTÃO DIREITO
+document.addEventListener('contextmenu', function (e) {
+  e.preventDefault();
 });
 
-
-// Download generated QR Code Image on click "DOWNLOAD" button
+// BAIXE A IMAGEM DO CÓDIGO QR GERADA CLICANDO NO BOTÃO "DOWNLOAD"
 function downloadIg(elmnt) {
-  demo2.style.visibility = "visible";
-  dbtn.style.cursor="no-drop";
-  dbtn.style.opacity= "0.7";
+
+  dbtn.style.cursor = "no-drop";
+  dbtn.style.opacity = "0.7";
+  generateBtn.onmouseover = function () {
+    setTimeout(() => {
+      demo2.style.visibility = 'visible';
+    }, 10);
+  }
+
 
   const link = elmnt
   const url = qrImg.src
@@ -135,37 +160,40 @@ function downloadIg(elmnt) {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   };
-  
- fetch(url, options)
-  .then( response => {
-    response.blob().then(blob => {
+
+  fetch(url, options)
+    .then(response => {
+      response.blob().then(blob => {
         let url = window.URL.createObjectURL(blob);
         let a = document.createElement('a');
         a.href = url;
         a.download = "QR_Code.jpg";
         a.click();
-        dbtn.style.cursor="pointer";
-        dbtn.style.opacity= "1";
-        demo2.style.visibility = "hidden";
+        dbtn.style.cursor = "pointer";
+        dbtn.style.opacity = "1";
+        generateBtn.onmouseover = function () {
+          setTimeout(() => {
+            demo2.style.visibility = 'hidden';
+          }, 10);
+        }
+      
       });
-    }); 
+    });
 }
 
-
-// Back to Home Button Properties
-function backHome(){
+// VOLTAR ÀS PROPRIEDADES DO BOTÃO HOME
+function backHome() {
   sameprop();
 }
 
-
-// Same Properties for two functions
-function sameprop(){
+// MESMAS PROPRIEDADES PARA DUAS FUNÇÕES
+function sameprop() {
   document.getElementById("text1").value = "";
   wrapper.classList.remove("active");
   preValue = "";
-  generateBtn.innerText = "Generate QR Code";
+  generateBtn.innerText = "Gerar QR Code";
 
-  generateBtn.onmouseover = function() {
+  generateBtn.onmouseover = function () {
     setTimeout(() => {
       demo1.style.visibility = 'hidden';
     }, 150);
@@ -175,11 +203,105 @@ function sameprop(){
   document.getElementById("btn").style.visibility = "visible";
   document.getElementById("btn1").style.visibility = "visible";
   backH.style.visibility = "hidden";
-  generateBtn.style.opacity= "1";
+  generateBtn.style.opacity = "1";
 }
-
 
 function test(e) {
-  generateBtn.style.opacity= "1";
-  generateBtn.style.cursor="pointer";
+  generateBtn.style.opacity = "1";
+  generateBtn.style.cursor = "pointer";
 }
+
+// FUNÇÃO PARA LIMPAR O CAMPO DE ENTRADA E OCULTAR O CONTEÚDO GERADO
+function clearInput() {
+  var inputElement = document.getElementById('text1');
+  inputElement.value = '';
+
+  var wrapper = document.querySelector('.wrapper');
+  wrapper.classList.remove('active');
+  preValue = '';
+
+  var generateBtn = document.getElementById('myBtn');
+  generateBtn.innerText = 'Gerar QR Code';
+
+  generateBtn.onmouseover = function () {
+    setTimeout(() => {
+      demo3.style.visibility = 'visible';
+    }, 10);
+  }
+
+
+  var inputContainer = document.querySelector('.input-container');
+  inputContainer.classList.remove('has-text');
+
+  // RESETAR A VARIÁVEL INDICANDO QUE UM QR CODE FOI GERADO
+  qrCodeGenerated = false;
+}
+
+// ADICIONAR OUVINTE DE ENTRADA AO CAMPO DE ENTRADA
+document.getElementById('text1').addEventListener('input', function () {
+  var inputContainer = document.querySelector('.input-container');
+  var generateBtn = document.getElementById('myBtn');
+
+  // ATUALIZAR A CLASSE 'HAS-TEXT' COM BASE NO CONTEÚDO DO CAMPO
+  inputContainer.classList.toggle('has-text', this.value.trim() !== '');
+
+  // ATUALIZAR O TEXTO DO BOTÃO
+  if (this.value.trim() !== '' && qrCodeGenerated) {
+    generateBtn.innerText = 'Gerar novo QR Code';
+  } else {
+    generateBtn.innerText = 'Gerar QR Code';
+  }
+  generateBtn.onmouseover = function () {
+    setTimeout(() => {
+      demo3.style.visibility = 'visible';
+    }, 10);
+  }
+
+});
+
+// Função para exibir a notificação
+function showNotification(message, targetId, duration = 2000) {
+  var targetElement = document.getElementById(targetId);
+
+  // Se o elemento não existir, cria-o dinamicamente
+  if (!targetElement) {
+    targetElement = document.createElement("p");
+    targetElement.id = targetId;
+    document.body.appendChild(targetElement);
+  }
+
+  targetElement.innerText = message;
+  targetElement.style.display = "block";
+
+  setTimeout(function () {
+    if (targetElement) {
+      targetElement.style.display = "none";
+    }
+  }, duration);
+}
+
+// Função para gerar o QR Code
+function generateQRCode() {
+  var qrInput = document.getElementById('text1');
+  var qrValue = qrInput.value.trim();
+
+  if (!qrValue) {
+    showNotification("⚠️ Por favor, cole ou digite o link para continuar! ⚠️", "demo");
+    return;
+  }
+
+  // Restante do seu código para gerar o QR Code
+
+    showNotification("Iniciando seu Download...⬇️", "demo2");
+
+
+  // Exibir notificação de download
+
+
+  showNotification("✅ QR Code gerado com sucesso!! ✅", "demo3");
+}
+  // showNotification("TESTESTESTESTESTESTESTE", "demo3");
+
+
+// Exemplo de chamada da função ao clicar no botão
+document.getElementById('myBtn').addEventListener('click', generateQRCode);
